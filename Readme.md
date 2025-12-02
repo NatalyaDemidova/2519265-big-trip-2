@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Демидова Наталья](https://up.htmlacademy.ru/ecmascript-individual/2/user/2519265).
-* Наставник: `Неизвестно`.
+* Наставник: [Олег Глущенко](https://htmlacademy.ru/profile/id305355).
 
 ---
 

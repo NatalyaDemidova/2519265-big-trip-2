@@ -25,16 +25,16 @@ function createTripPointsTemplate(point, offers, destinations) {
   return (
     `<li class="trip-events__item">
       <div class="event">
-        <time class="event__date" datetime=${dateFrom}>${humanizeDueDay(dateFrom, DAY_FORMAT.getMonthDay)}</time>
+        <time class="event__date" datetime=${humanizeDueDay(dateFrom, DAY_FORMAT.getDateForDataTime)}>${humanizeDueDay(dateFrom, DAY_FORMAT.getMonthDay)}</time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
         </div>
         <h3 class="event__title">${type} ${name}</h3>
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime=${dateFrom}>${humanizeDueDay(dateFrom, DAY_FORMAT.getTime)}</time>
+            <time class="event__start-time" datetime=${humanizeDueDay(dateFrom, DAY_FORMAT.getDateAndTimeForDataTime)}>${humanizeDueDay(dateFrom, DAY_FORMAT.getTime)}</time>
             &mdash;
-            <time class="event__end-time" datetime=${dateTo}>${humanizeDueDay(dateTo, DAY_FORMAT.getTime)}</time>
+            <time class="event__end-time" datetime=${humanizeDueDay(dateTo, DAY_FORMAT.getDateAndTimeForDataTime)}>${humanizeDueDay(dateTo, DAY_FORMAT.getTime)}</time>
           </p>
           <p class="event__duration">${getTotalTime(differentTime(dateFrom, dateTo))}</p>
         </div>

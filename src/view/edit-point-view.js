@@ -5,11 +5,11 @@ import {getDateWithTime} from '../utils.js';
 
 const dateNow = new Date();
 
-function createEventTypeTemplate(points, pointType = '') {
+function createEventTypeTemplate(points, pointType = '', id) {
 
   const getType = (type, checked) => (`<div class="event__type-item">
-            <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value=${type.replace(/^./, (char) => char.toUpperCase())} ${checked}>
-            <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
+            <input id="event-type-${type}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value=${type} ${checked}>
+            <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${type.replace(/^./, (char) => char.toUpperCase())}</label>
           </div>`);
   const pointsList = points.map(({ type }) => {
     const checked = (type === pointType) ? 'checked' : '';
@@ -124,7 +124,7 @@ function createEditPointTemplate(points, offers, destinations, point, destinatio
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-                ${createEventTypeTemplate(points, type)}
+                ${createEventTypeTemplate(points, type, id)}
               </fieldset>
             </div>
           </div>

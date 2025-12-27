@@ -1,8 +1,8 @@
 import { DAY_FORMAT } from '../const';
 import AbstractView from '../framework/view/abstract-view.js';
 // import { createElement } from '../render';
-import humanizeDueDay from '../utils';
-import {getDateWithTime} from '../utils.js';
+import humanizedueDate from '../utils/utils.js';
+import {getDateWithTime} from '../utils/utils.js';
 
 const dateNow = new Date();
 
@@ -144,10 +144,10 @@ function createEditPointTemplate(points, offers, destinations, point, destinatio
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time"  value=${getDateWithTime(humanizeDueDay(dateFrom, DAY_FORMAT.getDateWithSlash), humanizeDueDay(dateFrom, DAY_FORMAT.getTime))}>
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time"  value=${getDateWithTime(humanizedueDate(dateFrom, DAY_FORMAT.getDateWithSlash), humanizedueDate(dateFrom, DAY_FORMAT.getTime))}>
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${getDateWithTime(humanizeDueDay(dateTo, DAY_FORMAT.getDateWithSlash), humanizeDueDay(dateTo, DAY_FORMAT.getTime))}>
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${getDateWithTime(humanizedueDate(dateTo, DAY_FORMAT.getDateWithSlash), humanizedueDate(dateTo, DAY_FORMAT.getTime))}>
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -182,7 +182,7 @@ export default class EditPointView extends AbstractView {
   #handleFormSubmit = null;
   #handleEditClick = null;
 
-  constructor({points, offers, destinations, point = {}, destinationOfPoint = {}, onFormSubmit, onEditClick}) {
+  constructor({points, offers, destinations, point, destinationOfPoint, onFormSubmit, onEditClick}) {
     super();
 
     this.#points = points;

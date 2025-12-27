@@ -4,28 +4,28 @@ import {points} from '../mocks/points';
 
 export default class PointsModel {
 
-  points = points;
-  offers = offers.slice();
-  destinations = destinations.slice();
+  #points = points;
+  #offers = offers.slice();
+  #destinations = destinations.slice();
 
 
-  getPoints() {
-    return this.points;
+  get points() {
+    return this.#points;
   }
 
-  getOffers() {
-    return this.offers;
+  get offers() {
+    return this.#offers;
   }
 
-  getDestinations() {
-    return this.destinations;
+  get destinations() {
+    return this.#destinations;
   }
 
   getOffersByType(type) {
-    return this.offers.find((item) => type === item.type);
+    return this.#offers.find((item) => type === item.type);
   }
 
   getDestinationById(id) {
-    return this.destinations.find((item) => id === item.id);
+    return this.#destinations.find((item) => id === item.id);
   }
 }

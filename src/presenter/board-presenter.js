@@ -24,8 +24,8 @@ export default class BoardPresenter {
   }
 
   init() {
-    this.#boardPoints = [...this.#pointsModel.getPoints()];
-    this.#boardDestinations = [...this.#pointsModel.getDestinations()];
+    this.#boardPoints = [...this.#pointsModel.points];
+    this.#boardDestinations = [...this.#pointsModel.destinations];
 
     this.#renderBoard();
   }

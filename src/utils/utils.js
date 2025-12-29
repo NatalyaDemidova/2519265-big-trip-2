@@ -23,7 +23,9 @@ export function isPointFuture(dateStart) {
 }
 
 export function isPointExpiringToday(dateStart, dateEnd) {
-  return (dateStart && (new Date(dateStart).getTime() <= dateNow.getTime()) && (dateEnd && (new Date(dateEnd).getTime() >= dateNow.getTime())));
+  const isDateStartCoorrect = dateStart && (new Date(dateStart).getTime() <= dateNow.getTime());
+  const isDateEndCorrect = (dateEnd && (new Date(dateEnd).getTime() >= dateNow.getTime()));
+  return isDateStartCoorrect && isDateEndCorrect;
 }
 
 export function isPointExpired(dateEnd) {

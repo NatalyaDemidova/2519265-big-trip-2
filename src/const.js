@@ -1,5 +1,5 @@
 export const DAY_FORMAT = {
-  getMonthDay: 'MMMM D',
+  getMonthDay: 'MMM D',
   getTime: 'HH:mm',
   getDateWithSlash: 'DD/MM/YY',
   getDateForDataTime: 'YYYY-MM-DD',
@@ -7,6 +7,15 @@ export const DAY_FORMAT = {
 
 };
 
+export const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past',
+};
+
 export const MINUTES_IN_HOUR = 60;
 
 export const MINUTES_IN_DAY = 1440;
+
+export const dateNow = new Date();

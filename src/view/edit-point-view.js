@@ -1,9 +1,8 @@
-import { DAY_FORMAT } from '../const';
-import { createElement } from '../render';
-import humanizeDueDay from '../utils';
-import {getDateWithTime} from '../utils.js';
-
-const dateNow = new Date();
+import { DAY_FORMAT, dateNow } from '../const';
+import AbstractView from '../framework/view/abstract-view.js';
+// import { createElement } from '../render';
+import humanizedueDate from '../utils/utils.js';
+import {getDateWithTime} from '../utils/utils.js';
 
 function createEventTypeTemplate(points, pointType = '', id) {
 
@@ -69,6 +68,8 @@ function createOfferTemplate(offersOfPoint = [], offers, pointId) {
             ${list.join('')}
             </div>
           </section>`);
+  } else {
+    return '';
   }
 }
 
@@ -94,13 +95,13 @@ function createPicturesOfDestinations(pictures) {
 }
 
 function createButtonCloseOrDelete(point) {
-  if (point.name) {
-    return (
-      '<button class="event__reset-btn" type="reset">Delete</button>'
-    );
-  } else {
+  if (!point.type) {
     return (
       '<button class="event__reset-btn" type="reset">Cancel</button>'
+    );
+  }else {
+    return (
+      '<button class="event__reset-btn" type="reset">Delete</button>'
     );
   }
 }
@@ -141,10 +142,10 @@ function createEditPointTemplate(points, offers, destinations, point, destinatio
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time"  value=${getDateWithTime(humanizeDueDay(dateFrom, DAY_FORMAT.getDateWithSlash), humanizeDueDay(dateFrom, DAY_FORMAT.getTime))}>
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time"  value=${getDateWithTime(humanizedueDate(dateFrom, DAY_FORMAT.getDateWithSlash), humanizedueDate(dateFrom, DAY_FORMAT.getTime))}>
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${getDateWithTime(humanizeDueDay(dateTo, DAY_FORMAT.getDateWithSlash), humanizeDueDay(dateTo, DAY_FORMAT.getTime))}>
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${getDateWithTime(humanizedueDate(dateTo, DAY_FORMAT.getDateWithSlash), humanizedueDate(dateTo, DAY_FORMAT.getTime))}>
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -170,29 +171,42 @@ function createEditPointTemplate(points, offers, destinations, point, destinatio
   );
 }
 
-export default class EditPointView {
+export default class EditPointView extends AbstractView {
+  #points = null;
+  #offers = null;
+  #destinations = null;
+  #point = null;
+  #destinationOfPoint = null;
+  #handleFormSubmit = null;
+  #handleEditClick = null;
 
-  constructor({ points }, { offers }, { destinations }, { point } = {}, { destinationOfPoint } = {}) {
-    this.points = points;
-    this.offers = offers;
-    this.destinations = destinations;
-    this.point = point || {};
-    this.destinationOfPoint = destinationOfPoint || {};
+  constructor({points, offers, destinations, point, destinationOfPoint, onFormSubmit, onEditClick}) {
+    super();
+
+    this.#points = points;
+    this.#offers = offers;
+    this.#destinations = destinations;
+    this.#point = point || {};
+    this.#destinationOfPoint = destinationOfPoint || {};
+
+    this.#handleFormSubmit = onFormSubmit;
+    this.#handleEditClick = onEditClick;
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event--edit').addEventListener('submit', this.#formSubmitHandler);
   }
 
-  getTemplate() {
-    return createEditPointTemplate(this.points, this.offers, this.destinations, this.point, this.destinationOfPoint);
+  get template() {
+    return createEditPointTemplate(this.#points, this.#offers, this.#destinations, this.#point, this.#destinationOfPoint);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditClick();
+  };
 
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
 }

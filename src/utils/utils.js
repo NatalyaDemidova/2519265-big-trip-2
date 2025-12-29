@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
-import { MINUTES_IN_HOUR } from './const.js';
-import { MINUTES_IN_DAY } from './const.js';
+import { dateNow, MINUTES_IN_HOUR } from '../const.js';
+import { MINUTES_IN_DAY } from '../const.js';
 
 export const getRundomArrayElement = (items) => items[Math.floor(Math.random() * items.length)];
 
-export default function humanizeDueDay(dueDay, DAY_FORMAT) {
-  return dueDay ? dayjs(dueDay).format(DAY_FORMAT) : '';
+export default function humanizedueDate(dueDate, DAY_FORMAT) {
+  return dueDate ? dayjs(dueDate).format(DAY_FORMAT) : '';
 }
 
 export function differentTime(dateStart, dateEnd) {
@@ -18,6 +18,18 @@ export function getDateWithTime(date, time) {
   return date + space + time;
 }
 
+export function isPointFuture(dateStart) {
+  return dateStart && dayjs().isBefore(dayjs(dateStart));
+}
+
+export function isPointExpiringToday(dateStart, dateEnd) {
+  return (dateStart && (new Date(dateStart).getTime() <= dateNow.getTime()) && (dateEnd && (new Date(dateEnd).getTime() >= dateNow.getTime())));
+}
+
+export function isPointExpired(dateEnd) {
+  return dateEnd && dayjs().isAfter(dayjs(dateEnd));
+}
+
 export function getTotalTime(date) {
   let minutes = '';
   let hours = '';
@@ -27,11 +39,10 @@ export function getTotalTime(date) {
     days = Math.floor(date / MINUTES_IN_DAY);
     days = String(days).padStart(2, '0');
   }
-  if (date > MINUTES_IN_HOUR) {
+  if (date >= MINUTES_IN_HOUR) {
     hours = Math.floor((date - days * MINUTES_IN_DAY) / MINUTES_IN_HOUR);
     hours = String(hours).padStart(2, '0');
   }
-
   minutes = date - ((days * MINUTES_IN_DAY) + (hours * MINUTES_IN_HOUR));
   minutes = String(minutes).padStart(2, '0');
 

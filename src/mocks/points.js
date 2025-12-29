@@ -2,8 +2,8 @@ export const points = [
   {
     id: 'f4b62099-293f-4c3d-a702-94eec4a2876c',
     basePrice: 500,
-    dateFrom: '2019-07-10T22:55:56.845Z',
-    dateTo: '2019-07-11T11:22:13.375Z',
+    dateFrom: '2026-07-10T22:55:56.845Z',
+    dateTo: '2026-07-11T11:22:13.375Z',
     destination: 'cfe416cq-10xa-ye10-8077-2fs9a01edcaw',
     isFavorite: false,
     offers: [
@@ -14,8 +14,8 @@ export const points = [
   {
     id: 'f4b62099-293f-4c3d-a702-94eec4a2808c',
     basePrice: 1100,
-    dateFrom: '2019-07-09T12:00:56.845Z',
-    dateTo: '2019-07-10T20:02:13.375Z',
+    dateFrom: '2025-12-28T12:00:56.845Z',
+    dateTo: '2026-01-10T20:02:13.375Z',
     destination: 'cfe416cq-10xa-ye10-8077-2fs9a01edcab',
     isFavorite: true,
     offers: [],
@@ -24,8 +24,8 @@ export const points = [
   {
     id: 'f4b62099-293f-4c3d-a702-94eec4a2890c',
     basePrice: 2500,
-    dateFrom: '2019-07-10T22:55:56.845Z',
-    dateTo: '2019-07-11T11:22:13.375Z',
+    dateFrom: '2025-12-26T22:55:56.845Z',
+    dateTo: '2025-12-27T11:23:13.375Z',
     destination: 'cfe416cq-10xa-ye10-8077-2fs9a01edcay',
     isFavorite: false,
     offers: [
@@ -36,8 +36,8 @@ export const points = [
   {
     id: 'f4b62099-293f-4c3d-a702-94eec4a4590c',
     basePrice: 11000,
-    dateFrom: '2019-07-10T22:55:56.845Z',
-    dateTo: '2019-07-11T11:22:13.375Z',
+    dateFrom: '2025-12-29T16:00:56.845Z',
+    dateTo: '2026-01-01T00:00:13.375Z',
     destination: 'cfe416cq-10xa-ye10-8077-2fs9a01edcar',
     isFavorite: false,
     offers: [

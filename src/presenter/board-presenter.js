@@ -1,7 +1,7 @@
 import { remove, render, RenderPosition } from '../framework/render.js';
 import TripPointsListView from '../view/trip-points-list-view.js';
 import SortView from '../view/sort-view';
-import TripPresenter from './trip-presenter.js';
+import PointPresenter from './point-presenter.js';
 import { sortDayOfPointUp, sortPriceDown, updateItem } from '../utils/utils.js';
 import { SortType } from '../const.js';
 import NoPointsView from '../view/no-point-view.js';
@@ -18,7 +18,7 @@ export default class BoardPresenter {
   #boardOffers = null;
   #boardDestinations = [];
 
-  #tripPresenter = new Map();
+  #pointPresenters = new Map();
   #currentSortType = SortType.DAY;
   #sourcedBoardPoints = [];
 
@@ -57,13 +57,13 @@ export default class BoardPresenter {
 
   #renderBoard() {
 
+    if (this.#boardPoints.length === 0) {
+      this.#renderNoPoint();
+      return;
+    }
+
     if (this.#boardPoints.length > 0) {
       render(this.#tripPointsList, this.#boardContainer);
-
-      if (this.#boardPoints.length === 0) {
-        this.#renderNoPoint();
-        return;
-      }
 
       this.#renderSort();
 
@@ -72,15 +72,15 @@ export default class BoardPresenter {
   }
 
   #renderPoint(point) {
-    const tripPresenter = new TripPresenter({
+    const pointPresenter = new PointPresenter({
       pointListContainer: this.#tripPointsList.element,
       onDataChange: this.#handlePointChange,
       onModeChange: this.#handleModeChange
     });
 
-    tripPresenter.init(point, this.#boardOffers, this.#boardDestinations, this.#boardPoints);
+    pointPresenter.init(point, this.#boardOffers, this.#boardDestinations, this.#boardPoints);
 
-    this.#tripPresenter.set(point.id, tripPresenter);
+    this.#pointPresenters.set(point.id, pointPresenter);
   }
 
   #renderNoPoint() {
@@ -93,18 +93,18 @@ export default class BoardPresenter {
   }
 
   #clearTripPresenters() {
-    this.#tripPresenter.forEach((presenter) => presenter.destroy());
-    this.#tripPresenter.clear();
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
   }
 
   #handlePointChange = (updatedPoint) => {
     this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
     this.#sourcedBoardPoints = updateItem(this.#sourcedBoardPoints, updatedPoint);
-    this.#tripPresenter.get(updatedPoint.id).init(updatedPoint, this.#boardOffers, this.#boardDestinations, this.#boardPoints);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#boardOffers, this.#boardDestinations, this.#boardPoints);
   };
 
   #handleModeChange = () => {
-    this.#tripPresenter.forEach((presenter) => presenter.resetView());
+    this.#pointPresenters.forEach((presenter) => presenter.resetView());
 
   };
 

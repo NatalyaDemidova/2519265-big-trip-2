@@ -7,7 +7,7 @@ const Mode = {
   EDITING: 'EDITING',
 };
 
-export default class TripPresenter {
+export default class PointPresenter {
   #pointListContainer = null;
 
   #pointComponent = null;
@@ -53,7 +53,7 @@ export default class TripPresenter {
       offers: this.#offersOfPoint,
       destination: this.#destination,
       onEditClick: this.#handleEditClick,
-      onFavoritClick: this.#handleFavoritClick,
+      onFavoriteClick: this.#handleFavoriteClick,
     });
 
     this.#pointEditComponent = new EditPointView({
@@ -112,7 +112,7 @@ export default class TripPresenter {
     this.#replaceFormToCard();
   };
 
-  #handleFavoritClick = () => {
+  #handleFavoriteClick = () => {
     this.#handelDataChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
   };
 

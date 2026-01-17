@@ -62,5 +62,5 @@ export const destinations = [
         description: 'Yalta embankment',
       }
     ]
-  }
+  },
 ];

@@ -18,7 +18,6 @@ function createOffersTemplate(offers) {
 }
 
 function createTripPointsTemplate(point, offers, destination) {
-
   const { type, basePrice, dateFrom, dateTo, isFavorite } = point;
   const { name } = destination;
 

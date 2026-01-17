@@ -39,7 +39,6 @@ export default class PointPresenter {
     this.#offersAll = offers;
     this.#destinations = destinations;
     this.#points = points;
-
     this.type = point.type;
     this.#destination = this.#destinations.find((item) => this.#point.destination === item.id);
     this.#offersOfPointAll = (this.#offersAll.find((item) => this.type === item.type)).offers;
@@ -58,10 +57,9 @@ export default class PointPresenter {
 
     this.#pointEditComponent = new EditPointView({
       point: this.#point,
-      offersOfPoint: this.#offersOfPoint,
-      destination: this.#destination,
+      offers: this.#offersAll,
+      offersOfPointAll: this.#offersOfPointAll,
       destinations: this.#destinations,
-      offers: this.#offersOfPointAll,
       points: this.#points,
       onFormSubmit: this.#handleFormSubmit,
       onEditClick: this.#handleEditClickClose,
@@ -82,7 +80,6 @@ export default class PointPresenter {
 
     remove(prevPointComponent);
     remove(prevPointEditComponent);
-
   }
 
   destroy() {

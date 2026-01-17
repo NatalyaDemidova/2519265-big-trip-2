@@ -23,12 +23,12 @@ export default class PointPresenter {
   #offersOfPointAll = [];
   #offersAll = [];
 
-  #handelDataChange = null;
+  #handleDataChange = null;
   #handleModeChange = null;
 
   constructor({ pointListContainer, onDataChange, onModeChange }) {
     this.#pointListContainer = pointListContainer;
-    this.#handelDataChange = onDataChange;
+    this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
   }
 
@@ -110,11 +110,11 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handelDataChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
+    this.#handleDataChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
   };
 
   #handleFormSubmit = (point) => {
-    this.#handelDataChange(point);
+    this.#handleDataChange(point);
     this.#replaceFormToCard();
   };
 

@@ -20,10 +20,10 @@ function createEventTypeTemplate(points, pointType = '', id) {
   return pointsList.join('');
 }
 
-function createDestinationListTemplate(destinations) {
+function createDestinationListTemplate(id, destinations) {
   if (destinations) {
-    const destinationsList = destinations.map(({ id, name }) => (`<option id=${id} value=${name}></option>`));
-    return `<datalist id="destination-list-1">${destinationsList.join('')}</datalist>`;
+    const destinationsList = destinations.map(({ name }) => (`<option value=${name}></option>`));
+    return `<datalist id="destination-list-${id}">${destinationsList.join('')}</datalist>`;
   }
   return '';
 }
@@ -128,7 +128,7 @@ function createEditPointTemplate(points, offersAll, destinations, point) {
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name ? name : ''}" list="destination-list-1">
 
-            ${createDestinationListTemplate(destinations)}
+            ${createDestinationListTemplate(id, destinations)}
 
         </div>
 
@@ -145,7 +145,7 @@ function createEditPointTemplate(points, offersAll, destinations, point) {
                 <span class="visually-hidden">Price</span>
                 &euro;
               </label>
-              <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+              <input class="event__input  event__input--price" id="event-price-1" pattern="^[ 0-9]+$" title="Please enter a positive integer" type="text" name="event-price" value="${basePrice}">
             </div>
 
             <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -233,13 +233,13 @@ export default class EditPointView extends AbstractStatefulView {
   };
 
   #dateFromChangeHandler = ([dateFrom]) => {
-    this.updateElement({
+    this._setState({
       dateFrom: dateFrom,
     });
   };
 
   #dateToChangeHandler = ([dateTo]) => {
-    this.updateElement({
+    this._setState({
       dateTo: dateTo,
     });
   };

@@ -3,12 +3,16 @@ import TripPointsListView from '../view/trip-points-list-view.js';
 import SortView from '../view/sort-view';
 import PointPresenter from './point-presenter.js';
 import { sortDayOfPointUp, sortPriceDown } from '../utils/utils.js';
-import { SortType, UpdateType, UserAction } from '../const.js';
+import { FilterType, SortType, UpdateType, UserAction } from '../const.js';
 import NoPointsView from '../view/no-point-view.js';
+import { filter } from '../utils/filter.js';
+import NewEventPresenter from './new-event-presenter.js';
 
 export default class BoardPresenter {
   #pointsModel = null;
   #boardContainer = null;
+  #filterModel = null;
+  #newEventPresenter = null;
 
   #sortComponent = null;
   #tripPointsList = new TripPointsListView();
@@ -19,20 +23,37 @@ export default class BoardPresenter {
 
   #pointPresenters = new Map();
   #currentSortType = SortType.DAY;
+  #filterType = FilterType.EVERYTHING;
 
-  constructor({ boardContainer }, pointsModel) {
+  constructor({ boardContainer, pointsModel, filterModel, onNewEventDestroy }) {
     this.#pointsModel = pointsModel;
     this.#boardContainer = boardContainer;
+    this.#filterModel = filterModel;
+
+
+    this.#newEventPresenter = new NewEventPresenter({
+      pointListContainer: this.#tripPointsList.element,
+      onDataChange: this.#handleViewAction,
+      onDestroy: onNewEventDestroy
+    });
+
+    this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
+
+    this.#filterType = this.#filterModel.filter;
+    const points = this.#pointsModel.points;
+    const filteredPoints = filter[this.#filterType](points);
+
     switch (this.#currentSortType) {
       case SortType.TIME:
-        return [...this.#pointsModel.points].sort(sortDayOfPointUp);
+        return filteredPoints.sort(sortDayOfPointUp);
       case SortType.PRICE:
-        return [...this.#pointsModel.points].sort(sortPriceDown);
+        return filteredPoints.sort(sortPriceDown);
     }
-    return this.#pointsModel.points;
+    return filteredPoints;
   }
 
   get destinations() {
@@ -85,6 +106,12 @@ export default class BoardPresenter {
     }
   }
 
+  createPoint() {
+    this.#currentSortType = SortType.DAY;
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this.#newEventPresenter.init(this.#boardOffers, this.#boardDestinations, this.points);
+  }
+
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#tripPointsList.element,
@@ -98,8 +125,10 @@ export default class BoardPresenter {
   }
 
   #renderNoPoint() {
-    this.#noPointsComponent = new NoPointsView();
-    render(this.#noPointsComponent, this.#boardContainer.element);
+    this.#noPointsComponent = new NoPointsView({
+      filterType: this.#filterType
+    });
+    render(this.#noPointsComponent, this.#boardContainer);
   }
 
   #renderPoints() {
@@ -107,7 +136,6 @@ export default class BoardPresenter {
   }
 
   #handleViewAction = (actionType, updateType, update) => {
-
 
     switch (actionType) {
       case UserAction.UPDATE_POINT:
@@ -125,7 +153,7 @@ export default class BoardPresenter {
 
 
   #handleModelEvent = (updateType, data) => {
-    switch(updateType) {
+    switch (updateType) {
       case UpdateType.PATCH:
         this.#pointPresenters.get(data.id).init(data);
         break;
@@ -134,26 +162,32 @@ export default class BoardPresenter {
         this.#renderBoard();
         break;
       case UpdateType.MAJOR:
-        this.#clearBoard({resetSortType: true});
+        this.#clearBoard({ resetSortType: true });
         this.#renderBoard();
         break;
     }
   };
 
   #handleModeChange = () => {
+    this.#newEventPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
 
   };
 
-  #clearBoard({resetSortType = false} = {}) {
+  #clearBoard({ resetSortType = false } = {}) {
+
+    this.#newEventPresenter.destroy();
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
 
     remove(this.#sortComponent);
-    remove(this.#noPointsComponent);
 
-    if(resetSortType) {
+    if (resetSortType) {
       this.#currentSortType = SortType.DAY;
+    }
+
+    if (this.#noPointsComponent) {
+      remove(this.#noPointsComponent);
     }
   }
 }

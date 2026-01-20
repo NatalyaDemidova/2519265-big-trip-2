@@ -60,7 +60,6 @@ export default class PointPresenter {
     this.#pointEditComponent = new EditPointView({
       point: this.#point,
       offers: this.#offersAll,
-      offersOfPointAll: this.#offersOfPointAll,
       destinations: this.#destinations,
       points: this.#points,
       onFormSubmit: this.#handleFormSubmit,
@@ -114,7 +113,7 @@ export default class PointPresenter {
 
   #handleFavoriteClick = () => {
     this.#handleDataChange(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       { ...this.#point, isFavorite: !this.#point.isFavorite },
     );
@@ -128,8 +127,8 @@ export default class PointPresenter {
 
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
-      isMinorUpdate ? UserAction.MINOR : UserAction.PATCH,
-      point
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      point,
     );
 
     this.#replaceFormToCard();
@@ -142,9 +141,6 @@ export default class PointPresenter {
       UpdateType.MINOR,
       point,
     );
-
-    this.#replaceFormToCard();
-
   };
 
   #replaceCardToForm() {

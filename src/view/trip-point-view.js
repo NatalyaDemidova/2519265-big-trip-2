@@ -1,6 +1,7 @@
 import { DAY_FORMAT } from '../const';
 import AbstractView from '../framework/view/abstract-view';
 import humanizedueDate, { differentTime, getTotalTime } from '../utils/utils';
+import he from 'he';
 
 function createOffersTemplate(offers) {
   const getOffer = (title, price) => (
@@ -29,7 +30,7 @@ function createTripPointsTemplate(point, offers, destination) {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${type} ${name}</h3>
+        <h3 class="event__title">${type} ${he.encode(name)}</h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime=${humanizedueDate(dateFrom, DAY_FORMAT.getDateAndTimeForDataTime)}>${humanizedueDate(dateFrom, DAY_FORMAT.getTime)}</time>

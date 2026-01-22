@@ -18,8 +18,8 @@ export default class BoardPresenter {
   #tripPointsList = new TripPointsListView();
 
   #noPointsComponent = null;
-  #boardOffers = null;
-  #boardDestinations = [];
+  #offers = null;
+  #destinations = [];
 
   #pointPresenters = new Map();
   #currentSortType = SortType.DAY;
@@ -60,13 +60,16 @@ export default class BoardPresenter {
     return this.#pointsModel.destinations;
   }
 
+
   get offers() {
     return this.#pointsModel.offers;
   }
 
   init() {
-    this.#boardDestinations = [...this.#pointsModel.destinations];
-    this.#boardOffers = [...this.#pointsModel.offers];
+    this.#destinations = [...this.destinations];
+
+    this.#offers = [...this.offers] ?? {};
+
     this.#renderBoard();
   }
 
@@ -109,7 +112,7 @@ export default class BoardPresenter {
   createPoint() {
     this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this.#newEventPresenter.init(this.#boardOffers, this.#boardDestinations, this.points);
+    this.#newEventPresenter.init(this.#offers, this.#destinations, this.points);
   }
 
   #renderPoint(point) {
@@ -119,7 +122,7 @@ export default class BoardPresenter {
       onModeChange: this.#handleModeChange
     });
 
-    pointPresenter.init(point, this.#boardOffers, this.#boardDestinations, this.points);
+    pointPresenter.init(point, this.#offers, this.#destinations, this.points);
 
     this.#pointPresenters.set(point.id, pointPresenter);
   }

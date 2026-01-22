@@ -14,7 +14,7 @@ const RenderPosition = {
  * @returns {HTMLElement} Созданный элемент
  */
 function createElement(template) {
-  const newElement = document.createElement('div');
+  const newElement = document.createElement('ul');
   newElement.innerHTML = template;
 
   return newElement.firstElementChild;

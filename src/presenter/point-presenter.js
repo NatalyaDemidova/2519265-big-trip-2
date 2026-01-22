@@ -38,13 +38,18 @@ export default class PointPresenter {
 
     this.#point = point;
 
-    this.#offersAll = offers;
-    this.#destinations = destinations;
     this.#points = points;
     this.type = point.type;
+
+    this.#destinations = destinations;
     this.#destination = this.#destinations.find((item) => this.#point.destination === item.id);
-    this.#offersOfPointAll = (this.#offersAll.find((item) => this.type === item.type)).offers;
-    this.#offersOfPoint = this.#offersOfPointAll.filter((item) => this.#point.offers.includes(item.id));
+
+    if (offers.length > 0) {
+      this.#offersAll = offers;
+      this.#offersOfPointAll = (this.#offersAll.find((item) => this.type === item.type)).offers;
+      this.#offersOfPoint = this.#offersOfPointAll.filter((item) => this.#point.offers.includes(item.id));
+    }
+
 
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
@@ -66,6 +71,7 @@ export default class PointPresenter {
       onEditClick: this.#handleEditClickClose,
       onDeleteClick: this.#handleDeleteClick,
     });
+
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this.#pointComponent, this.#pointListContainer);

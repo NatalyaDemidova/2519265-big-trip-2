@@ -48,7 +48,7 @@ export function getTotalTime(date) {
   minutes = date - ((days * MINUTES_IN_DAY) + (hours * MINUTES_IN_HOUR));
   minutes = String(minutes).padStart(2, '0');
 
-  return (`${days > 0 ? ` ${days}D` : ''} ${hours}H ${minutes}M`);
+  return (`${days > 0 ? ` ${days}D` : ''} ${hours > 0 ? ` ${hours}H` : ''} ${minutes}M`);
 }
 
 export function sortDayOfPointUp(pointA, pointB) {

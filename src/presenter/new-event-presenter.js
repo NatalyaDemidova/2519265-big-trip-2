@@ -22,9 +22,12 @@ export default class NewEventPresenter {
     this.#handleDestroy = onDestroy;
   }
 
-
   init(offers, destinations, points) {
-    this.#offers = offers;
+    if (JSON.stringify(offers) !== JSON.stringify([{}])) {
+      this.#offers = offers;
+
+    }
+
     this.#destinations = destinations;
     this.#points = points;
 
@@ -40,7 +43,7 @@ export default class NewEventPresenter {
       onDeleteClick: this.#handleDeleteClick
     });
 
-    render(this.#pointEditComponent, this.#pointListContainer, RenderPosition.BEFOREBEGIN);
+    render(this.#pointEditComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
 
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }

@@ -111,11 +111,10 @@ function createButtonCloseOrDelete(point) {
 function createEditPointTemplate(points, offersAll, destinations, point) {
   const destinationOfPoint = (destinations.find((item) => point.destination === item.id)) || '';
   const { id = 1, basePrice = '', dateFrom = dateNow, dateTo = dateNow, type = points[0].type } = point;
-  const offers = (offersAll.find((item) => type === item.type)).offers;
+  const offers = (offersAll && (offersAll.length > 0)) ? ((offersAll.find((item) => type === item.type)).offers) : '';
   const { description = '', name, pictures = [] } = destinationOfPoint;
 
-  return (
-    `< li class="trip-events__item" >
+  return (`<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
@@ -134,10 +133,10 @@ function createEditPointTemplate(points, offersAll, destinations, point) {
         </div>
 
         <div class="event__field-group  event__field-group--destination">
-          <label class="event__label  event__type-output" for="event-destination-1">
+          <label class="event__label  event__type-output" for="event-destination-${id}">
             ${type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" title="Please, enter one of the destinations available in the list" required value="${name ? he.encode(name) : ''}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination-${id}" title="Please, enter one of the destinations available in the list" required value="${name ? he.encode(name) : ''}" list="destination-list-${id}">
 
             ${createDestinationListTemplate(id, destinations)}
 
@@ -220,11 +219,14 @@ export default class EditPointView extends AbstractStatefulView {
     }
   }
 
+
   _restoreHandlers() {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
-    this.element.addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event--edit').addEventListener('submit', this.#formSubmitHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#offersClickHandler);
-    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationClickHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('input', this.#destinationClickHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('blur', this.#destinationBlurHandler);
+
     this.element.querySelector('.event__input--price').addEventListener('input', this.#priceClickHandler);
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteHandler);
 
@@ -237,11 +239,11 @@ export default class EditPointView extends AbstractStatefulView {
 
   #offerCheckClickHandler = (evt) => {
     if (!this._state.offers.includes(evt.target.dataset.offerId)) {
-      this.updateElement({
+      this._setState({
         offers: [...this._state.offers, evt.target.dataset.offerId],
       });
     } else {
-      this.updateElement({
+      this._setState({
         offers: this._state.offers.filter((item) => item !== evt.target.dataset.offerId),
       });
     }
@@ -290,6 +292,15 @@ export default class EditPointView extends AbstractStatefulView {
     }
   };
 
+  #destinationBlurHandler = (evt) => {
+    const value = evt.target.value.trim();
+
+    const destination = (this.#destinations.find((item) => value === item.name));
+
+    evt.target.value = (destination) ? destination.name : '';
+
+  };
+
   #priceClickHandler = (evt) => {
     evt.preventDefault();
     this._setState({
@@ -310,6 +321,7 @@ export default class EditPointView extends AbstractStatefulView {
           dateFormat: 'd/m/y H:i',
           defaultDate: this._state.dateFrom,
           enableTime: true,
+          maxDate: this._state.dateTo,
           onClose: this.#dateFromChangeHandler,
         }
       );

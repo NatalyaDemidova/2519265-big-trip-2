@@ -10,6 +10,7 @@ Thumbs.db
 # Вспомогательные файлы
 *.log*
 node_modules/
+js2-big-trip-e2e
 
 # Собранные файлы (допишите самостоятельно)
 bundle.js

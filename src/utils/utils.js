@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { dateNow, MINUTES_IN_HOUR } from '../const.js';
+import { dateNow, MINUTES_IN_HOUR, MINUTES_IN_YEARS } from '../const.js';
 import { MINUTES_IN_DAY } from '../const.js';
 
 export const getRundomArrayElement = (items) => items[Math.floor(Math.random() * items.length)];
@@ -36,22 +36,30 @@ export function getTotalTime(date) {
   let minutes = '';
   let hours = '';
   let days = '';
+  let years = '';
 
+  if (date >= MINUTES_IN_DAY) {
+    years = Math.floor(date / MINUTES_IN_YEARS);
+    years = String(years).padStart(2, '0');
+    date = date - (years * MINUTES_IN_YEARS);
+  }
   if (date >= MINUTES_IN_DAY) {
     days = Math.floor(date / MINUTES_IN_DAY);
     days = String(days).padStart(2, '0');
+    date = date - (days * MINUTES_IN_DAY);
   }
   if (date >= MINUTES_IN_HOUR) {
-    hours = Math.floor((date - days * MINUTES_IN_DAY) / MINUTES_IN_HOUR);
+    hours = Math.floor(date / MINUTES_IN_HOUR);
     hours = String(hours).padStart(2, '0');
+    date = date - (hours * MINUTES_IN_HOUR);
   }
-  minutes = date - ((days * MINUTES_IN_DAY) + (hours * MINUTES_IN_HOUR));
+  minutes = date;
   minutes = String(minutes).padStart(2, '0');
 
-  return (`${days > 0 ? ` ${days}D` : ''} ${hours > 0 ? ` ${hours}H` : ''} ${minutes}M`);
+  return (`${years > 0 ? ` ${years}Y` : ''} ${days > 0 ? ` ${days}D` : ''} ${hours > 0 ? ` ${hours}H` : ''} ${minutes}M`);
 }
 
-export function sortDayOfPointUp(pointA, pointB) {
+export function sortDurationOfPointUp(pointA, pointB) {
 
   const pointAFullTime = differentTime(pointA.dateFrom, pointA.dateTo);
   const pointBFullTime = differentTime(pointB.dateFrom, pointB.dateTo);
@@ -65,4 +73,12 @@ export function sortPriceDown(pointA, pointB) {
 
 export function isDateEqual(dateA, dateB) {
   return ((dateA === null && dateB === null) || dayjs(dateA).isSame(dateB));
+}
+
+export function sortDayOfPointUp(pointA, pointB) {
+  return new Date(pointA.dateFrom) - new Date(pointB.dateFrom);
+}
+
+export function sortDayOfPointDown(pointA, pointB) {
+  return new Date(pointB.dateTo) - new Date(pointA.dateTo);
 }

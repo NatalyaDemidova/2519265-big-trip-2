@@ -9,6 +9,7 @@ export default class PointsModel extends Observable {
   #points = [];
   #offers = [];
   #destinations = [];
+  #err = false;
 
   constructor({ pointsApiService, offersApiService, destinationsApiService }) {
     super();
@@ -30,6 +31,10 @@ export default class PointsModel extends Observable {
     return this.#destinations;
   }
 
+  get err() {
+    return this.#err;
+  }
+
 
   async init() {
     try {
@@ -41,9 +46,7 @@ export default class PointsModel extends Observable {
       this.#destinations = await this.#destinationsApiService.destinations;
 
     } catch (err) {
-      this.#points = [];
-      this.#offers = [];
-      this.#destinations = [];
+      this.#err = true;
     }
     this._notify(UpdateType.INIT);
 
@@ -100,10 +103,10 @@ export default class PointsModel extends Observable {
 
       this.#points = [
         adobtedPoint,
-        ...this.#points,
+        ...this.#points
       ];
 
-      this._notify(updateType, update);
+      this._notify(updateType, adobtedPoint);
 
     } catch (err) {
       throw new Error(err);
@@ -121,19 +124,19 @@ export default class PointsModel extends Observable {
     }
 
     try {
-      await this.#pointsApiService.deletePoint(update);
+      await this.#pointsApiService.deletedPoint(update);
 
       this.#points = [
         ...this.#points.slice(0, index),
         ...this.#points.slice(index + 1),
       ];
+
+      this._notify(updateType);
+
     } catch (err) {
       throw new Error(err);
 
     }
-
-    this._notify(updateType);
-
   }
 }
 

@@ -1,6 +1,5 @@
 import { remove, render, RenderPosition } from '../framework/render.js';
 import EditPointView from '../view/edit-point-view.js';
-import { nanoid } from 'nanoid';
 import { UserAction, UpdateType } from '../const.js';
 
 export default class NewEventPresenter {
@@ -23,6 +22,7 @@ export default class NewEventPresenter {
   }
 
   init(offers, destinations, points) {
+
     if (JSON.stringify(offers) !== JSON.stringify([{}])) {
       this.#offers = offers;
 
@@ -40,7 +40,9 @@ export default class NewEventPresenter {
       destinations: this.#destinations,
       points: this.#points,
       onFormSubmit: this.#handleFormSubmit,
-      onDeleteClick: this.#handleDeleteClick
+      onEditClick: this.#handleDeleteClick,
+
+      onDeleteClick: this.#handleDeleteClick,
     });
 
     render(this.#pointEditComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
@@ -70,10 +72,8 @@ export default class NewEventPresenter {
     this.#handleDataChange(
       UserAction.ADD_TASK,
       UpdateType.MINOR,
-      { id: nanoid(), ...point },
+      { ...point },
     );
-
-    this.destroy();
   };
 
 
@@ -88,4 +88,22 @@ export default class NewEventPresenter {
       this.destroy();
     }
   };
+
+  setSaving() {
+    this.#pointEditComponent.updateElement({
+      isSaving: true,
+      isDeleting: true,
+    });
+  }
+
+  setAborting() {
+
+    const resetFormState = () => {
+      this.#pointEditComponent.updateElement({
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+    this.#pointEditComponent.shake(resetFormState);
+  }
 }

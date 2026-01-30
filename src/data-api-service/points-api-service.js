@@ -10,7 +10,7 @@ export default class PointsApiService extends ApiService {
 
   async updatePoints(point) {
     const response = await this._load({
-      url: `points/:${point.id}`,
+      url: `points/${point.id}`,
       method: Method.PUT,
       body: JSON.stringify(this.#adaptedToServer(point)),
       headers: new Headers({ 'Content-Type': 'application/json' })
@@ -23,13 +23,12 @@ export default class PointsApiService extends ApiService {
 
   async postedPoint(point) {
 
-    const response = this._load({
+    const response = await this._load({
       url: 'points',
       method: Method.POST,
       body: JSON.stringify(this.#adaptedToServer(point)),
       headers: new Headers({ 'Content-Type': 'application/json' })
     });
-
 
     const parsedResponse = await ApiService.parseResponse(response);
 
@@ -37,8 +36,8 @@ export default class PointsApiService extends ApiService {
   }
 
   async deletedPoint(point) {
-    const response = this._load({
-      url: `points/:${point.id}`,
+    const response = await this._load({
+      url: `points/${point.id}`,
       method: Method.DELETE,
     });
 
@@ -48,9 +47,9 @@ export default class PointsApiService extends ApiService {
   #adaptedToServer(point) {
     const apdatedPoint = {
       ...point,
-      'base_price': point.basePrice,
-      'date_to': point.dateTo instanceof Date ? point.dateTo.toISOString() : null,
-      'date_from': point.dateFrom instanceof Date ? point.dateFrom.toISOString() : null,
+      'base_price': Number(point.basePrice),
+      'date_to': point.dateTo,
+      'date_from': point.dateFrom,
       'is_favorite': point.isFavorite,
     };
 

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { dateNow, MINUTES_IN_HOUR, MINUTES_IN_YEARS } from '../const.js';
+import { dateNow, MINUTES_IN_HOUR } from '../const.js';
 import { MINUTES_IN_DAY } from '../const.js';
 
 export const getRundomArrayElement = (items) => items[Math.floor(Math.random() * items.length)];
@@ -14,6 +14,9 @@ export function differentTime(dateStart, dateEnd) {
 
 export function getDateWithTime(date, time) {
   const space = '&nbsp;';
+  if((!date) && (!time)) {
+    return '';
+  }
 
   return date + space + time;
 }
@@ -33,31 +36,32 @@ export function isPointExpired(dateEnd) {
 }
 
 export function getTotalTime(date) {
-  let minutes = '';
-  let hours = '';
-  let days = '';
-  let years = '';
+  let minutes = 0;
+  let hours = 0;
+  let days = 0;
 
   if (date >= MINUTES_IN_DAY) {
-    years = Math.floor(date / MINUTES_IN_YEARS);
-    years = String(years).padStart(2, '0');
-    date = date - (years * MINUTES_IN_YEARS);
-  }
-  if (date >= MINUTES_IN_DAY) {
     days = Math.floor(date / MINUTES_IN_DAY);
-    days = String(days).padStart(2, '0');
     date = date - (days * MINUTES_IN_DAY);
   }
   if (date >= MINUTES_IN_HOUR) {
     hours = Math.floor(date / MINUTES_IN_HOUR);
-    hours = String(hours).padStart(2, '0');
     date = date - (hours * MINUTES_IN_HOUR);
   }
   minutes = date;
+
+  days = String(days).padStart(2, '0');
+  hours = String(hours).padStart(2, '0');
   minutes = String(minutes).padStart(2, '0');
 
-  return (`${years > 0 ? ` ${years}Y` : ''} ${days > 0 ? ` ${days}D` : ''} ${hours > 0 ? ` ${hours}H` : ''} ${minutes}M`);
+  if (days > 0) {
+    return (`${days}d ${hours}h ${minutes}m`);
+  } else if (hours > 0) {
+    return (`${hours}h ${minutes}m`);
+  }
+  return `${minutes}m`;
 }
+
 
 export function sortDurationOfPointUp(pointA, pointB) {
 

@@ -1,4 +1,4 @@
-import { DAY_FORMAT, PriceRangeForPoint, dateNow } from '../const';
+import { DAY_FORMAT, PriceRangeForPoint } from '../const';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import humanizedueDate from '../utils/utils.js';
 import { getDateWithTime } from '../utils/utils.js';
@@ -122,7 +122,7 @@ function createButtonCloseOrDelete(point) {
 
 function createEditPointTemplate(points, offersAll, destinations, point) {
   const destinationOfPoint = (destinations.find((item) => point.destination === item.id)) || '';
-  const { id = 1, basePrice = '', dateFrom = '', dateTo = dateNow, type = points[0].type, isSaving, isDeleting } = point;
+  const { id = 1, basePrice, dateFrom, dateTo, type = points[0].type, isSaving, isDeleting } = point;
   const offers = (offersAll && (offersAll.length > 0)) ? ((offersAll.find((item) => type === item.type)).offers) : '';
   const { description = '', name, pictures = [] } = destinationOfPoint;
 
@@ -262,10 +262,12 @@ export default class EditPointView extends AbstractStatefulView {
     }
   };
 
+
   #dateFromChangeHandler = ([dateFrom]) => {
     this._setState({
       dateFrom: dateFrom,
     });
+
   };
 
   #dateToChangeHandler = ([dateTo]) => {
@@ -276,6 +278,7 @@ export default class EditPointView extends AbstractStatefulView {
 
   #editClickHandler = (evt) => {
     evt.preventDefault();
+    this.#datepickerFrom.clear();
     this.updateElement(EditPointView.parsePointToState(this.#point, this.#point.type));
     this.#handleEditClick();
   };
@@ -331,6 +334,7 @@ export default class EditPointView extends AbstractStatefulView {
   };
 
   #setDatepikerFrom() {
+
     this.#datepickerFrom = flatpickr(
       this.element.querySelector('#event-start-time-1'),
       {
@@ -340,8 +344,7 @@ export default class EditPointView extends AbstractStatefulView {
         enableTime: true,
         maxDate: this._state.dateTo,
         onClose: this.#dateFromChangeHandler,
-      }
-    );
+      });
   }
 
   #setDatepikerTo() {

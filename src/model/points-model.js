@@ -40,12 +40,15 @@ export default class PointsModel extends Observable {
     try {
       const points = await this.#pointsApiService.points;
       this.#points = points.map(this.#apdatedPointToClient);
-
       this.#offers = await this.#offersApiService.offers;
-
       this.#destinations = await this.#destinationsApiService.destinations;
 
+
     } catch (err) {
+      this.#points = [];
+      this.#offers = [];
+      this.#destinations = [];
+
       this.#err = true;
     }
     this._notify(UpdateType.INIT);

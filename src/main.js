@@ -3,11 +3,11 @@ import PointsModel from './model/points-model';
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import NewEventButtonView from './view/new-event-button-view.js';
-import { render, RenderPosition } from './framework/render.js';
+import { render } from './framework/render.js';
 import PointsApiService from './data-api-service/points-api-service.js';
 import OffersApiService from './data-api-service/offers-api-service.js';
 import DestinationsApiService from './data-api-service/destinations-api-service.js';
-import TripInfoView from './view/trip-info-view.js';
+import TripInfoPresenter from './presenter/trip-info-presenter.js';
 
 const AUTHORIZATION = 'Basic eo0w590ik2jmkk9a';
 const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
@@ -24,7 +24,8 @@ const pointsModel = new PointsModel({
 
 });
 
-const tripInfoComponent = new TripInfoView({
+const tripInfoPresenter = new TripInfoPresenter({
+  mainContainer: mainContainer,
   pointsModel
 });
 
@@ -56,8 +57,9 @@ function handleNewPointButtonClick() {
   newEventButtonComponent.element.disabled = true;
 }
 
-render(tripInfoComponent, mainContainer, RenderPosition.AFTERBEGIN);
 render(newEventButtonComponent, mainContainer);
 filterPresenter.init();
 boardPresenter.init();
 pointsModel.init();
+tripInfoPresenter.init();
+

@@ -13,6 +13,7 @@ export const TimeLimitBlock = {
 
 export const DAY_FORMAT = {
   getMonthDay: 'MMM D',
+  getDayAndMonth: 'D MMM',
   getTime: 'HH:mm',
   getDateWithSlash: 'DD/MM/YY',
   getDateForDataTime: 'YYYY-MM-DD',
@@ -31,7 +32,7 @@ export const MINUTES_IN_HOUR = 60;
 
 export const MINUTES_IN_DAY = 1440;
 
-export const MINUTES_IN_YEARS = 262800;
+export const MINUTES_IN_YEARS = 525600;
 
 export const dateNow = new Date();
 

@@ -23,7 +23,6 @@ function createTripPointsTemplate(point, offers, destinations) {
   const destination = destinations.find((item) => point.destination === item.id);
   const { name } = destination;
 
-
   return (
     `<li class="trip-events__item">
       <div class="event">

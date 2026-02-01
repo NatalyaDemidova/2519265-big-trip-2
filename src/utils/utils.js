@@ -2,8 +2,6 @@ import dayjs from 'dayjs';
 import { dateNow, MINUTES_IN_HOUR } from '../const.js';
 import { MINUTES_IN_DAY } from '../const.js';
 
-export const getRundomArrayElement = (items) => items[Math.floor(Math.random() * items.length)];
-
 export default function humanizedueDate(dueDate, DAY_FORMAT) {
   return dueDate ? dayjs(dueDate).format(DAY_FORMAT) : '';
 }

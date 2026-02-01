@@ -55,6 +55,7 @@ export default class ApiService {
    * @param {Response} response Объект ответа
    */
   static checkStatus(response) {
+
     if (!response.ok) {
       throw new Error(`${response.status}: ${response.statusText}`);
     }

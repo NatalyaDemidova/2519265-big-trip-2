@@ -4,12 +4,31 @@ import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import NewEventButtonView from './view/new-event-button-view.js';
 import { render } from './framework/render.js';
+import PointsApiService from './data-api-service/points-api-service.js';
+import OffersApiService from './data-api-service/offers-api-service.js';
+import DestinationsApiService from './data-api-service/destinations-api-service.js';
+import TripInfoPresenter from './presenter/trip-info-presenter.js';
 
-const newEventButtonContainer = document.querySelector('.trip-main');
+const AUTHORIZATION = 'Basic eo0w590ik2jmkk9a';
+const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
+const mainContainer = document.querySelector('.trip-main');
 const filtersContainer = document.querySelector('.trip-controls__filters');
 const siteMainElement = document.querySelector('.trip-events');
-const pointsModel = new PointsModel();
+
 const filterModel = new FilterModel();
+
+const pointsModel = new PointsModel({
+  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION),
+  offersApiService: new OffersApiService(END_POINT, AUTHORIZATION),
+  destinationsApiService: new DestinationsApiService(END_POINT, AUTHORIZATION),
+
+});
+
+const tripInfoPresenter = new TripInfoPresenter({
+  mainContainer: mainContainer,
+  pointsModel
+});
+
 
 const boardPresenter = new BoardPresenter(
   {
@@ -38,6 +57,9 @@ function handleNewPointButtonClick() {
   newEventButtonComponent.element.disabled = true;
 }
 
-render(newEventButtonComponent, newEventButtonContainer);
+render(newEventButtonComponent, mainContainer);
 filterPresenter.init();
 boardPresenter.init();
+pointsModel.init();
+tripInfoPresenter.init();
+

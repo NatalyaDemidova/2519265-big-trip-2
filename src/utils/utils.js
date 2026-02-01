@@ -14,6 +14,9 @@ export function differentTime(dateStart, dateEnd) {
 
 export function getDateWithTime(date, time) {
   const space = '&nbsp;';
+  if((!date) && (!time)) {
+    return '';
+  }
 
   return date + space + time;
 }
@@ -33,25 +36,34 @@ export function isPointExpired(dateEnd) {
 }
 
 export function getTotalTime(date) {
-  let minutes = '';
-  let hours = '';
-  let days = '';
+  let minutes = 0;
+  let hours = 0;
+  let days = 0;
 
   if (date >= MINUTES_IN_DAY) {
     days = Math.floor(date / MINUTES_IN_DAY);
-    days = String(days).padStart(2, '0');
+    date = date - (days * MINUTES_IN_DAY);
   }
   if (date >= MINUTES_IN_HOUR) {
-    hours = Math.floor((date - days * MINUTES_IN_DAY) / MINUTES_IN_HOUR);
-    hours = String(hours).padStart(2, '0');
+    hours = Math.floor(date / MINUTES_IN_HOUR);
+    date = date - (hours * MINUTES_IN_HOUR);
   }
-  minutes = date - ((days * MINUTES_IN_DAY) + (hours * MINUTES_IN_HOUR));
+  minutes = date;
+
+  days = String(days).padStart(2, '0');
+  hours = String(hours).padStart(2, '0');
   minutes = String(minutes).padStart(2, '0');
 
-  return (`${days > 0 ? ` ${days}D` : ''} ${hours > 0 ? ` ${hours}H` : ''} ${minutes}M`);
+  if (days > 0) {
+    return (`${days}d ${hours}h ${minutes}m`);
+  } else if (hours > 0) {
+    return (`${hours}h ${minutes}m`);
+  }
+  return `${minutes}m`;
 }
 
-export function sortDayOfPointUp(pointA, pointB) {
+
+export function sortDurationOfPointUp(pointA, pointB) {
 
   const pointAFullTime = differentTime(pointA.dateFrom, pointA.dateTo);
   const pointBFullTime = differentTime(pointB.dateFrom, pointB.dateTo);
@@ -65,4 +77,12 @@ export function sortPriceDown(pointA, pointB) {
 
 export function isDateEqual(dateA, dateB) {
   return ((dateA === null && dateB === null) || dayjs(dateA).isSame(dateB));
+}
+
+export function sortDayOfPointUp(pointA, pointB) {
+  return new Date(pointA.dateFrom) - new Date(pointB.dateFrom);
+}
+
+export function sortDayOfPointDown(pointA, pointB) {
+  return new Date(pointB.dateTo) - new Date(pointA.dateTo);
 }

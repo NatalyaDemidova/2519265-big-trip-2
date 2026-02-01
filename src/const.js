@@ -1,5 +1,19 @@
+export const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+
+};
+
+export const TimeLimitBlock = {
+  LIMIT_LOWER: 350,
+  LIMIT_UPPER: 1000,
+};
+
 export const DAY_FORMAT = {
   getMonthDay: 'MMM D',
+  getDayAndMonth: 'D MMM',
   getTime: 'HH:mm',
   getDateWithSlash: 'DD/MM/YY',
   getDateForDataTime: 'YYYY-MM-DD',
@@ -17,6 +31,8 @@ export const FilterType = {
 export const MINUTES_IN_HOUR = 60;
 
 export const MINUTES_IN_DAY = 1440;
+
+export const MINUTES_IN_YEARS = 525600;
 
 export const dateNow = new Date();
 
@@ -44,4 +60,10 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
+};
+
+export const PriceRangeForPoint = {
+  MIN_PRICE : 1,
+  MAX_PRICE: 1000000,
 };

@@ -32,10 +32,6 @@ export const MINUTES_IN_HOUR = 60;
 
 export const MINUTES_IN_DAY = 1440;
 
-export const MINUTES_IN_YEARS = 525600;
-
-export const dateNow = new Date();
-
 export const sorts = [
   {name: 'day'},
   {name: 'event'},

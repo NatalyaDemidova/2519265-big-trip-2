@@ -35,7 +35,8 @@ const boardPresenter = new BoardPresenter(
     boardContainer: siteMainElement,
     pointsModel,
     filterModel,
-    onNewEventDestroy: handleNewEventFormClose
+    onNewEventDestroy: handleNewEventFormClose,
+    onErrorLoad: desabledNewPointsButton
   });
 
 const filterPresenter = new FilterPresenter({
@@ -52,9 +53,13 @@ function handleNewEventFormClose() {
   newEventButtonComponent.element.disabled = false;
 }
 
+function desabledNewPointsButton() {
+  newEventButtonComponent.element.disabled = true;
+}
+
 function handleNewPointButtonClick() {
   boardPresenter.createPoint();
-  newEventButtonComponent.element.disabled = true;
+  desabledNewPointsButton();
 }
 
 render(newEventButtonComponent, mainContainer);

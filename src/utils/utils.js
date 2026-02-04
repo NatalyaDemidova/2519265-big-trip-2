@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
-import { dateNow, MINUTES_IN_HOUR } from '../const.js';
+import { MINUTES_IN_HOUR } from '../const.js';
 import { MINUTES_IN_DAY } from '../const.js';
-
-export const getRundomArrayElement = (items) => items[Math.floor(Math.random() * items.length)];
 
 export default function humanizedueDate(dueDate, DAY_FORMAT) {
   return dueDate ? dayjs(dueDate).format(DAY_FORMAT) : '';
@@ -26,8 +24,8 @@ export function isPointFuture(dateStart) {
 }
 
 export function isPointExpiringToday(dateStart, dateEnd) {
-  const isDateStartCoorrect = dateStart && (new Date(dateStart).getTime() <= dateNow.getTime());
-  const isDateEndCorrect = (dateEnd && (new Date(dateEnd).getTime() >= dateNow.getTime()));
+  const isDateStartCoorrect = dateStart && (new Date(dateStart).getTime() <= new Date().getTime());
+  const isDateEndCorrect = (dateEnd && (new Date(dateEnd).getTime() >= new Date().getTime()));
   return isDateStartCoorrect && isDateEndCorrect;
 }
 

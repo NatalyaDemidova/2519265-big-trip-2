@@ -66,16 +66,16 @@ function createTripInfoTemplate(points, offersAll, destinations) {
 
   return (
     `<section class="trip-main__trip-info  trip-info">
-            <div class="trip-info__main">
-              <h1 class="trip-info__title">${getTitleOfPoint(points, offersAll, destinations, firstPoint, lastPoint)}</h1>
+      <div class="trip-info__main">
+        <h1 class="trip-info__title">${getTitleOfPoint(points, offersAll, destinations, firstPoint, lastPoint)}</h1>
 
-              <p class="trip-info__dates">${getDateOfPoint(firstPoint, lastPoint)}</p>
-            </div>
+        <p class="trip-info__dates">${getDateOfPoint(firstPoint, lastPoint)}</p>
+      </div>
 
-            <p class="trip-info__cost">
-              Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTotalPrice(points, offersAll)}</span>
-            </p>
-          </section>`
+      <p class="trip-info__cost">
+        Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTotalPrice(points, offersAll)}</span>
+      </p>
+    </section>`
   );
 }
 

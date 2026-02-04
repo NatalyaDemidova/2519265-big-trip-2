@@ -31,17 +31,21 @@ export default class BoardPresenter {
   #filterType = FilterType.EVERYTHING;
   #isLoading = true;
 
+  #errorLoad = null;
+
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimitBlock.LIMIT_LOWER,
     upperLimit: TimeLimitBlock.LIMIT_UPPER,
   });
 
-  constructor({ boardContainer, pointsModel, filterModel, onNewEventDestroy }) {
+  constructor({ boardContainer, pointsModel, filterModel, onNewEventDestroy, onErrorLoad }) {
     this.#pointsModel = pointsModel;
     this.#boardContainer = boardContainer;
     this.#filterModel = filterModel;
 
     this.#onNewEventDestroy = onNewEventDestroy;
+
+    this.#errorLoad = onErrorLoad;
 
 
     this.#newEventPresenter = new NewEventPresenter({
@@ -126,6 +130,7 @@ export default class BoardPresenter {
 
     if (this.err) {
       this.#renderFailedLoadData();
+      this.#errorLoad();
       return;
     }
 

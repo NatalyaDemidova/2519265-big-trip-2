@@ -119,6 +119,12 @@ function createButtonCloseOrDelete(point) {
   );
 }
 
+function createRollupBtn() {
+  return (`<button class="event__rollup-btn" type="button">
+              <span class="visually-hidden">Open event</span>
+            </button>`);
+}
+
 
 function createEditPointTemplate(points, offersAll, destinations, point) {
   const destinationOfPoint = (destinations.find((item) => point.destination === item.id)) || '';
@@ -172,9 +178,7 @@ function createEditPointTemplate(points, offersAll, destinations, point) {
 
             <button class="event__save-btn  btn  btn--blue" type="submit">${isSaving ? 'Saving...' : 'Save'}</button>
             ${createButtonCloseOrDelete(point)}
-            <button class="event__rollup-btn" type="button">
-              <span class="visually-hidden">Open event</span>
-            </button>
+            ${(point.destination !== '') ? createRollupBtn() : ''}
           </header>
           ${(offers.length > 0) || destinationOfPoint ? `<section class="event__details">
             ${createOfferTemplate(point.offers, offers, id)}
@@ -234,7 +238,10 @@ export default class EditPointView extends AbstractStatefulView {
 
   _restoreHandlers() {
 
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    if (this.element.querySelector('.event__rollup-btn')) {
+      this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+
+    }
     this.element.querySelector('.event--edit').addEventListener('submit', this.#formSubmitHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#offersClickHandler);
     this.element.querySelector('.event__input--destination').addEventListener('input', this.#destinationClickHandler);

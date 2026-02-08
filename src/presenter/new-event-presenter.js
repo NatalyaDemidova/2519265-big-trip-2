@@ -14,6 +14,8 @@ export default class NewEventPresenter {
 
   #pointEditComponent = null;
 
+  #isAnimating = false;
+
   constructor({ pointListContainer, onDataChange, onDestroy }) {
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
@@ -84,6 +86,9 @@ export default class NewEventPresenter {
 
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
+      if(this.#isAnimating === true) {
+        return;
+      }
       evt.preventDefault();
       this.destroy();
     }
@@ -98,11 +103,15 @@ export default class NewEventPresenter {
 
   setAborting() {
 
+    this.#isAnimating = true;
+
     const resetFormState = () => {
       this.#pointEditComponent.updateElement({
         isSaving: false,
         isDeleting: false,
       });
+
+      this.#isAnimating = false;
     };
     this.#pointEditComponent.shake(resetFormState);
   }

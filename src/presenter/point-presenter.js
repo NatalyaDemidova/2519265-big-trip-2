@@ -27,6 +27,7 @@ export default class PointPresenter {
 
   #handleDataChange = null;
   #handleModeChange = null;
+  #isAnimating = false;
 
   constructor({ pointListContainer, onDataChange, onModeChange }) {
     this.#pointListContainer = pointListContainer;
@@ -103,17 +104,6 @@ export default class PointPresenter {
     }
   }
 
-  #escKeyDownHandler = (evt) => {
-    if ((evt.key === 'Escape') || (evt.key === 'Esc')) {
-      evt.preventDefault();
-      this.#pointEditComponent.updateElement(this.#point);
-
-      this.#replaceFormToCard();
-
-      document.removeEventListener('keydown', this.#escKeyDownHandler);
-    }
-  };
-
   #handleEditClick = () => {
     this.#replaceCardToForm();
   };
@@ -169,6 +159,7 @@ export default class PointPresenter {
     if (this.#mode === Mode.EDITING) {
       this.#pointEditComponent.updateElement({
         isSaving: true,
+        isDisabling: true,
       });
     }
   }
@@ -177,11 +168,14 @@ export default class PointPresenter {
     if (this.#mode === Mode.EDITING) {
       this.#pointEditComponent.updateElement({
         isDeleting: true,
+        isDisabling: true,
       });
     }
   }
 
   setAborting() {
+    this.#isAnimating = true;
+
     if (this.#mode === Mode.DEFAULT) {
       this.#pointComponent.shake();
       return;
@@ -191,10 +185,28 @@ export default class PointPresenter {
       this.#pointEditComponent.updateElement({
         isSaving: false,
         isDeleting: false,
+        isDisabling: false,
       });
+
+      this.#isAnimating = false;
+
     };
 
     this.#pointEditComponent.shake(resetFormState);
-
   }
+
+  #escKeyDownHandler = (evt) => {
+
+    if ((evt.key === 'Escape') || (evt.key === 'Esc')) {
+
+      if (this.#isAnimating === true) {
+        return;
+      }
+
+      evt.preventDefault();
+      this.#pointEditComponent.reset(this.#point);
+
+      this.#replaceFormToCard();
+    }
+  };
 }

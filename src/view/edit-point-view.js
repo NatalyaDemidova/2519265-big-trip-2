@@ -106,7 +106,7 @@ function createPicturesOfDestinations(pictures) {
   return '';
 }
 
-function createButtonCloseOrDelete(point) {
+function createButtonCloseOrDelete(point, isDisabling) {
   let buttonName = '';
   if (!(point.destination !== '')) {
     buttonName = 'Cancel';
@@ -115,7 +115,7 @@ function createButtonCloseOrDelete(point) {
   }
 
   return (
-    `<button class="event__reset-btn" type="reset">${buttonName}</button>`
+    `<button class="event__reset-btn" type="reset" ${isDisabling ? 'disabled' : ''}>${buttonName}</button>`
   );
 }
 
@@ -128,7 +128,7 @@ function createRollupBtn() {
 
 function createEditPointTemplate(points, offersAll, destinations, point) {
   const destinationOfPoint = (destinations.find((item) => point.destination === item.id)) || '';
-  const { id = 1, basePrice, dateFrom, dateTo, type = points[0].type, isSaving, isDeleting } = point;
+  const { id = 1, basePrice, dateFrom, dateTo, type = points[0].type, isSaving, isDeleting, isDisabling } = point;
   const offers = (offersAll && (offersAll.length > 0)) ? ((offersAll.find((item) => type === item.type)).offers) : '';
   const { description = '', name, pictures = [] } = destinationOfPoint;
 
@@ -176,8 +176,8 @@ function createEditPointTemplate(points, offersAll, destinations, point) {
               <input class="event__input  event__input--price" id="event-price-1" pattern="^[ 0-9]+$" title="Please enter a positive integer" type="text" name="event-price" value="${basePrice}">
             </div>
 
-            <button class="event__save-btn  btn  btn--blue" type="submit">${isSaving ? 'Saving...' : 'Save'}</button>
-            ${createButtonCloseOrDelete(point)}
+            <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabling ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+            ${createButtonCloseOrDelete(point, isDisabling)}
             ${(point.destination !== '') ? createRollupBtn() : ''}
           </header>
           ${(offers.length > 0) || destinationOfPoint ? `<section class="event__details">
@@ -235,6 +235,11 @@ export default class EditPointView extends AbstractStatefulView {
     }
   }
 
+  reset(point) {
+    this.updateElement(
+      EditPointView.parsePointToState(point),
+    );
+  }
 
   _restoreHandlers() {
 
@@ -374,6 +379,7 @@ export default class EditPointView extends AbstractStatefulView {
       ...point,
       isSaving: false,
       isDeleting: false,
+      isDisabling: false,
     };
   }
 
@@ -382,6 +388,7 @@ export default class EditPointView extends AbstractStatefulView {
 
     delete point.isSaving;
     delete point.isDeleting;
+    delete point.isDisabling;
 
     return point;
   }
